@@ -66,8 +66,8 @@ class PostgreSQLConan(ConanFile):
             os.makedirs(install_folder)
 
         if self.settings.os == "Windows":
+            command = os.path.join(self.pq_msvc_dir, 'install')
             with tools.chdir(os.path.abspath(self.pq_source_folder)):
-                command = os.path.join(self.pq_msvc_dir, 'install')
                 self.run("%s %s" % (command, install_folder))
 
         self.copy("*", dst="include", src=install_folder, keep_path=True)
