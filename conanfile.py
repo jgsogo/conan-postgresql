@@ -62,20 +62,18 @@ class PostgreSQLConan(ConanFile):
                 raise NotImplementedError("Windows compiler {!r} not implemented".format(self.settings.compiler))
 
     def package(self):
-        """
+        install_folder = os.path.join(self.pq_source_folder, 'install')
         if self.settings.os == "Windows":
-            install_folder = os.path.join(self.pq_source_folder, 'install')
             with tools.chdir(self.pq_msvc_dir):
-                self.run("cpan Module::Install")  <-- This one fails...
+                # self.run("cpan Module::Install")  <-- This one fails...
                 self.run("install %s" % install_folder)
-        """
 
-        self.copy("*", dst="include", src=os.path.join(self.pq_source_folder, "src", "include"), keep_path=True)
+        self.copy("*", dst="include", src=install_folder, keep_path=True)
         self.copy(pattern="COPYRIGHT", dst="licenses", src=self.pq_source_folder, ignore_case=True, keep_path=False)
 
-        if self.settings.os == "Windows":
-            self.copy("*.lib", dst="lib", src=os.path.join(self.pq_source_folder, str(self.settings.build_type)))
-            self.copy("*.dll", dst="bin", src=os.path.join(self.pq_source_folder, str(self.settings.build_type)))
+        #if self.settings.os == "Windows":
+        #    self.copy("*.lib", dst="lib", src=os.path.join(self.pq_source_folder, str(self.settings.build_type)))
+        #    self.copy("*.dll", dst="bin", src=os.path.join(self.pq_source_folder, str(self.settings.build_type)))
 
     def package_info(self):
         self.cpp_info.libs = ["pq",]
