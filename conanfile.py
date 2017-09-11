@@ -19,11 +19,11 @@ class PostgreSQLConan(ConanFile):
 
     @property
     def pq_source_folder(self):
-        return 'postgresql-{}'.format(self.version_short)
+        return os.path.abspath('postgresql-{}'.format(self.version_short))
 
     @property
     def pq_msvc_dir(self):
-        return os.path.abspath(os.path.join(self.pq_source_folder, 'src', 'tools', 'msvc'))
+        return os.path.join(self.pq_source_folder, 'src', 'tools', 'msvc')
 
     def build_requirements(self):
         if self.settings.os == "Windows":
@@ -48,7 +48,6 @@ class PostgreSQLConan(ConanFile):
         else:
             if self.settings.compiler == "Visual Studio":
                 # Visual Studio: https://www.postgresql.org/docs/current/static/install-windows-full.html
-                msvc_dir = os.path.abspath(os.path.join(self.pq_source_folder, 'src', 'tools', 'msvc'))
 
                 #config_pl = os.path.join(msvc_dir, 'config.pl')
                 #with open(config_pl, 'w') as cfg:
@@ -62,13 +61,13 @@ class PostgreSQLConan(ConanFile):
                 raise NotImplementedError("Windows compiler {!r} not implemented".format(self.settings.compiler))
 
     def package(self):
-        install_folder = os.path.abspath(os.path.join(self.pq_source_folder, 'install'))
+        install_folder = os.path.join(self.pq_source_folder, 'install')
         if not os.path.exists(install_folder):
             os.makedirs(install_folder)
 
         if self.settings.os == "Windows":
             with tools.chdir(os.path.abspath(self.pq_source_folder)):
-                command = os.path.abspath(os.path.join(self.pq_msvc_dir, 'install'))
+                command = os.path.join(self.pq_msvc_dir, 'install')
                 self.run("%s %s" % (command, install_folder))
 
         self.copy("*", dst="include", src=install_folder, keep_path=True)
