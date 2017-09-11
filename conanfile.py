@@ -68,12 +68,6 @@ class PostgreSQLConan(ConanFile):
 
         if self.settings.os == "Windows":
             with tools.chdir(self.pq_msvc_dir):
-                # self.run("cpan Module::Install")  <-- This one fails...
-                replace_in_file('install.pl', 'use Install qw(Install);', 'use FindBin qw( $RealBin );\nuse lib $RealBin;\nuse Install qw(Install);')
-                print("*"*20)
-                with open('install.pl') as f:
-                    print(f)
-                print("*" * 20)
                 self.run("install %s" % install_folder)
 
         self.copy("*", dst="include", src=install_folder, keep_path=True)
