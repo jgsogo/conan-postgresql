@@ -62,7 +62,10 @@ class PostgreSQLConan(ConanFile):
                 raise NotImplementedError("Windows compiler {!r} not implemented".format(self.settings.compiler))
 
     def package(self):
-        install_folder = os.path.join(self.pq_source_folder, 'install')
+        install_folder = os.path.abspath(os.path.join(self.pq_source_folder, 'install'))
+        if not os.path.exists(install_folder):
+            os.makedirs(install_folder)
+
         if self.settings.os == "Windows":
             with tools.chdir(self.pq_msvc_dir):
                 # self.run("cpan Module::Install")  <-- This one fails...
