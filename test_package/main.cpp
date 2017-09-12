@@ -1,9 +1,9 @@
 
 #include <iostream>
-#include <postgres_fe.h>
+#include <libpq-fe.h>
 
 int main()
 {
-    std::cout << "libpq " << std::endl;
+    std::cout << "libpq " << PQlibVersion() << std::endl;
     return 0;
 }

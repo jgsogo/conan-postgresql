@@ -61,16 +61,17 @@ class PostgreSQLConan(ConanFile):
                 raise NotImplementedError("Windows compiler {!r} not implemented".format(self.settings.compiler))
 
     def package(self):
-        install_folder = os.path.join(self.pq_source_folder, 'install')
-        if not os.path.exists(install_folder):
-            os.makedirs(install_folder)
+        install_folder = os.path.join(self.pq_source_folder, 'install_dir')
 
         if self.settings.os == "Windows":
-            command = os.path.join(self.pq_msvc_dir, 'install')
-            with tools.chdir(os.path.abspath(self.pq_source_folder)):
-                self.run("%s %s" % (command, install_folder))
+            # Modify install.pl file: https://stackoverflow.com/questions/46161246/cpan-install-moduleinstall-fails-passing-tests-strawberryperl/46162454?noredirect=1#comment79291874_46162454
+            install_pl = os.path.join(self.pq_msvc_dir, 'install.pl')
+            replace_in_file(install_pl, "use Install qw(Install);", "use FindBin qw( $RealBin );\nuse lib $RealBin;\nuse Install qw(Install);")
+            with tools.chdir(os.path.abspath(self.pq_msvc_dir)):
+                self.run("install %s" % install_folder)
 
-        self.copy("*", dst="include", src=install_folder, keep_path=True)
+            self.copy("*", dst="", src=install_folder, keep_path=True)
+
         self.copy(pattern="COPYRIGHT", dst="licenses", src=self.pq_source_folder, ignore_case=True, keep_path=False)
 
         #if self.settings.os == "Windows":
@@ -78,5 +79,5 @@ class PostgreSQLConan(ConanFile):
         #    self.copy("*.dll", dst="bin", src=os.path.join(self.pq_source_folder, str(self.settings.build_type)))
 
     def package_info(self):
-        self.cpp_info.libs = ["pq",]
+        self.cpp_info.libs = ["libpq",]
 
