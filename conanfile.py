@@ -12,6 +12,8 @@ class PostgreSQLConan(ConanFile):
     description = "Conan package for the postgresql library"
     url = "https://github.com/jgsogo/conan-postgresql"
     license = "https://www.postgresql.org/about/licence/"
+    options = {"without_readline": [True, False],}
+    default_options = "without_readline=False"
 
     @property
     def version_short(self):
@@ -25,6 +27,17 @@ class PostgreSQLConan(ConanFile):
     def pq_msvc_dir(self):
         return os.path.join(self.pq_source_folder, 'src', 'tools', 'msvc')
 
+    @property
+    def pq_install_folder(self):
+        return os.path.join(self.pq_source_folder, 'install_dir')
+
+    def system_requirements(self):
+        if not self.options.without_readline:
+            if os_info.is_linux and os_info.with_apt:
+                installer = SystemPackageTool()
+                #installer.install("libreadline")
+                installer.install("libreadline-dev")
+
     def build_requirements(self):
         if self.settings.os == "Windows":
             try:
@@ -34,7 +47,7 @@ class PostgreSQLConan(ConanFile):
 
     def source(self):
         if self.version == 'master':
-            raise NotImplementedError("Compilation of master branch not implemented")
+            raise NotImplementedError("Sources for master branch not implemented")
         else:
             url = "https://ftp.postgresql.org/pub/source/{}/postgresql-{}.tar.gz".format(self.version, self.version_short)
             zip_name = 'postgresql.tar.gz'
@@ -43,9 +56,15 @@ class PostgreSQLConan(ConanFile):
             os.unlink(zip_name)
 
     def build(self):
-        if self.settings.os == "Linux" or self.settings.os == "Macos":
-            raise NotImplementedError("Compilation of master branch not implemented")
-        else:
+        if self.settings.os == "Linux":
+            install_folder = self.pq_install_folder
+            env = AutoToolsBuildEnvironment(self)
+            with tools.environment_append(env.vars):
+                with tools.chdir(self.pq_source_folder):
+                    self.run("./configure --prefix={} && make".format(install_folder))
+                    self.run("make install")
+
+        elif self.settings.os == "Windows":
             if self.settings.compiler == "Visual Studio":
                 # Visual Studio: https://www.postgresql.org/docs/current/static/install-windows-full.html
 
@@ -59,9 +78,11 @@ class PostgreSQLConan(ConanFile):
                         self.run("build.bat")
             else:
                 raise NotImplementedError("Windows compiler {!r} not implemented".format(self.settings.compiler))
+        else:
+            raise NotImplementedError("Compiler {!r} for os {!r} not available".format(self.settings.compiler, self.settings.os))
 
     def package(self):
-        install_folder = os.path.join(self.pq_source_folder, 'install_dir')
+        install_folder = self.pq_install_folder
 
         if self.settings.os == "Windows":
             # Modify install.pl file: https://stackoverflow.com/questions/46161246/cpan-install-moduleinstall-fails-passing-tests-strawberryperl/46162454?noredirect=1#comment79291874_46162454
@@ -70,14 +91,11 @@ class PostgreSQLConan(ConanFile):
             with tools.chdir(os.path.abspath(self.pq_msvc_dir)):
                 self.run("install %s" % install_folder)
 
-            self.copy("*", dst="", src=install_folder, keep_path=True)
-
+        self.copy("*", dst="", src=install_folder, keep_path=True)
         self.copy(pattern="COPYRIGHT", dst="licenses", src=self.pq_source_folder, ignore_case=True, keep_path=False)
 
-        #if self.settings.os == "Windows":
-        #    self.copy("*.lib", dst="lib", src=os.path.join(self.pq_source_folder, str(self.settings.build_type)))
-        #    self.copy("*.dll", dst="bin", src=os.path.join(self.pq_source_folder, str(self.settings.build_type)))
-
     def package_info(self):
-        self.cpp_info.libs = ["libpq",]
-
+        if self.settings.os == "Windows":
+            self.cpp_info.libs = ["libpq",]
+        else:
+            self.cpp_info.libs = ["pq", ]
