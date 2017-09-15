@@ -35,7 +35,9 @@ matrix:
          env:
 
 install:
+  - chmod +x .travis/install.sh
   - ./.travis/install.sh
 
 script:
+  - chmod +x .travis/run.sh
   - ./.travis/run.sh
