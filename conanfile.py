@@ -31,19 +31,18 @@ class PostgreSQLConan(ConanFile):
     def pq_install_folder(self):
         return os.path.join(self.pq_source_folder, 'install_dir')
 
-    def system_requirements(self):
-        if not self.options.without_readline:
-            if os_info.is_linux and os_info.with_apt:
-                installer = SystemPackageTool()
-                #installer.install("libreadline")
-                installer.install("libreadline-dev")
-
     def build_requirements(self):
         if self.settings.os == "Windows":
             try:
                 self.run("perl -v")
             except ConanException:
                 self.build_requires("strawberryperl/5.26.0@conan/stable")
+
+        if os_info.is_linux and os_info.with_apt:
+            if not self.options.without_readline:
+                installer = SystemPackageTool()
+                #installer.install("libreadline")
+                installer.install("libreadline-dev")
 
     def source(self):
         if self.version == 'master':
