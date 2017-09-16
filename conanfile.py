@@ -56,7 +56,7 @@ class PostgreSQLConan(ConanFile):
             os.unlink(zip_name)
 
     def build(self):
-        if self.settings.os == "Linux":
+        if self.settings.os in ["Linux", "Macos"]:
             install_folder = self.pq_install_folder
             env = AutoToolsBuildEnvironment(self)
             with tools.environment_append(env.vars):
@@ -77,9 +77,9 @@ class PostgreSQLConan(ConanFile):
                     with tools.chdir(self.pq_msvc_dir):
                         self.run("build.bat")
             else:
-                raise NotImplementedError("Windows compiler {!r} not implemented".format(self.settings.compiler))
+                raise NotImplementedError("Windows compiler {!r} not implemented".format(str(self.settings.compiler)))
         else:
-            raise NotImplementedError("Compiler {!r} for os {!r} not available".format(self.settings.compiler, self.settings.os))
+            raise NotImplementedError("Compiler {!r} for os {!r} not available".format(str(self.settings.compiler), str(self.settings.os)))
 
     def package(self):
         install_folder = self.pq_install_folder
