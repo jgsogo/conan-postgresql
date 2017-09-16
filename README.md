@@ -25,12 +25,36 @@
     </tr>
     <tr>
         <td>v9.6.5</td>
-        <td>[![Build status](https://ci.appveyor.com/api/projects/status/betl3gxaxprtqd1h?svg=true)](https://ci.appveyor.com/project/jgsogo/conan-postgresql)</td>
-        <td>[![](https://travis-matrix-badges.herokuapp.com/repos/jgsogo/conan-postgresql/branches/master/1)](https://travis-ci.org/jgsogo/conan-postgresql)</td>    
-        <td>[![](https://travis-matrix-badges.herokuapp.com/repos/jgsogo/conan-postgresql/branches/master/2)](https://travis-ci.org/jgsogo/conan-postgresql)</td>    
-        <td>[![](https://travis-matrix-badges.herokuapp.com/repos/jgsogo/conan-postgresql/branches/master/3)](https://travis-ci.org/jgsogo/conan-postgresql)</td>    
-        <td>[![](https://travis-matrix-badges.herokuapp.com/repos/jgsogo/conan-postgresql/branches/master/4)](https://travis-ci.org/jgsogo/conan-postgresql)</td>    
-        <td>[![](https://travis-matrix-badges.herokuapp.com/repos/jgsogo/conan-postgresql/branches/master/5)](https://travis-ci.org/jgsogo/conan-postgresql)</td>    
+        <td>
+            <a href="https://ci.appveyor.com/project/jgsogo/conan-postgresql">
+                <img src="https://ci.appveyor.com/api/projects/status/betl3gxaxprtqd1h?svg=true" alt="Build status"/>
+            </a>
+        </td>        
+        <td>
+            <a href="https://travis-ci.org/jgsogo/conan-postgresql">
+                <img src="https://travis-matrix-badges.herokuapp.com/repos/jgsogo/conan-postgresql/branches/master/1" alt="Build status"/>
+            </a>
+        </td>
+        <td>
+            <a href="https://travis-ci.org/jgsogo/conan-postgresql">
+                <img src="https://travis-matrix-badges.herokuapp.com/repos/jgsogo/conan-postgresql/branches/master/2" alt="Build status"/>
+            </a>
+        </td>
+        <td>
+            <a href="https://travis-ci.org/jgsogo/conan-postgresql">
+                <img src="https://travis-matrix-badges.herokuapp.com/repos/jgsogo/conan-postgresql/branches/master/3" alt="Build status"/>
+            </a>
+        </td>
+        <td>
+            <a href="https://travis-ci.org/jgsogo/conan-postgresql">
+                <img src="https://travis-matrix-badges.herokuapp.com/repos/jgsogo/conan-postgresql/branches/master/4" alt="Build status"/>
+            </a>
+        </td>
+        <td>
+            <a href="https://travis-ci.org/jgsogo/conan-postgresql">
+                <img src="https://travis-matrix-badges.herokuapp.com/repos/jgsogo/conan-postgresql/branches/master/5" alt="Build status"/>
+            </a>
+        </td>
     </tr>
 </table>
 
