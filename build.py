@@ -1,8 +1,16 @@
 from conan.packager import ConanMultiPackager
 import os, platform
+from conanfile import PostgreSQLConan
+
+
+username = os.getenv("CONAN_USERNAME", "jgsogo")
+reference = os.getenv("CONAN_REFERENCE", "{}/{}".format(PostgreSQLConan.name, PostgreSQLConan.version))
+
 
 if __name__ == "__main__":
-    builder = ConanMultiPackager(stable_branch_pattern='v9.6.5')
+    builder = ConanMultiPackager(username=username,
+                                 reference=reference,
+                                 stable_branch_pattern='master')
     builder.add_common_builds()
     filtered_builds = []
     for settings, options, env_vars, build_requires in builder.builds:
