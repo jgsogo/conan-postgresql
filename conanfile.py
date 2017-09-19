@@ -1,11 +1,11 @@
+
 import os
-import sys
-from conans import ConanFile, CMake, AutoToolsBuildEnvironment, tools, VisualStudioBuildEnvironment
-from conans.tools import os_info, SystemPackageTool, download, untargz, replace_in_file, unzip, pythonpath
+from conans import ConanFile, AutoToolsBuildEnvironment, tools, VisualStudioBuildEnvironment
+from conans.tools import os_info, SystemPackageTool, download, untargz, replace_in_file
 from conans.errors import ConanException
 
 
-class PostgreSQLConan(ConanFile):
+class ConanRecipe(ConanFile):
     name = "postgresql"
     version = "v9.6.5"
     settings = "os", "compiler", "build_type", "arch"

@@ -1,10 +1,10 @@
 from conan.packager import ConanMultiPackager
 import os, platform
-from conanfile import PostgreSQLConan
+from conanfile import ConanRecipe
 
 
 username = os.getenv("CONAN_USERNAME", "jgsogo")
-reference = os.getenv("CONAN_REFERENCE", "{}/{}".format(PostgreSQLConan.name, PostgreSQLConan.version))
+reference = os.getenv("CONAN_REFERENCE", "{}/{}".format(ConanRecipe.name, ConanRecipe.version))
 
 
 if __name__ == "__main__":
