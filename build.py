@@ -1,5 +1,7 @@
+
+import os
+
 from conan.packager import ConanMultiPackager
-import os, platform
 from conanfile import ConanRecipe
 
 
